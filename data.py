@@ -5,14 +5,14 @@ def mnist():
     """Return train and test dataloaders for MNIST."""
     train_data, train_labels = [ ], [ ]
     for i in range(5):
-        train_data.append(torch.load(f"train_images_{i}.pt"))
-        train_labels.append(torch.load(f"train_target_{i}.pt"))
+        train_data.append(torch.load(f"data/train_images_{i}.pt"))
+        train_labels.append(torch.load(f"data/train_target_{i}.pt"))
 
     train_data = torch.cat(train_data, dim=0)
     train_labels = torch.cat(train_labels, dim=0)
 
-    test_data = torch.load("test_images.pt")
-    test_labels = torch.load("test_target.pt")
+    test_data = torch.load("data/test_images.pt")
+    test_labels = torch.load("data/test_target.pt")
 
     print(train_data.shape)
     print(train_labels.shape)

@@ -1,17 +1,16 @@
+# main.py
 import click
 import torch
 from torch import nn
-from model import myawesomemodel
+from model import MyAwesomeModel  # Import the new class
 
 from data import mnist
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-
 
 @click.group()
 def cli():
     """Command line interface."""
     pass
-
 
 @click.command()
 @click.option("--lr", default=1e-3, help="learning rate to use for training")
@@ -23,8 +22,9 @@ def train(lr, batch_size, num_epochs):
     print(lr)
     print(batch_size)
 
-    # TODO: Implement training loop here
-    model = myawesomemodel.to(device)
+    # Instantiate the model from the new class
+    model = MyAwesomeModel().to(device)
+
     train_set, _ = mnist()
     train_dataloader = torch.utils.data.DataLoader(train_set, batch_size=batch_size)
 
@@ -45,24 +45,22 @@ def train(lr, batch_size, num_epochs):
 
     torch.save(model, "model.pt")
 
-
 @click.command()
 @click.argument("model_checkpoint")
 def evaluate(model_checkpoint):
     """Evaluate a trained model."""
-    print("Evaluating like my life dependends on it")
+    print("Evaluating like my life depends on it")
     print(model_checkpoint)
 
-    # TODO: Implement evaluation logic here
+    # Instantiate the model from the new class
     model = torch.load(model_checkpoint)
+
     _, test_set = mnist()
-    test_dataloader = torch.utils.data.DataLoader(
-        test_set, batch_size=64, shuffle=False
-    )
+    test_dataloader = torch.utils.data.DataLoader(test_set, batch_size=64, shuffle=False)
     model.eval()
 
-    test_preds = [ ]
-    test_labels = [ ]
+    test_preds = []
+    test_labels = []
     with torch.no_grad():
         for batch in test_dataloader:
             x, y = batch
@@ -77,10 +75,8 @@ def evaluate(model_checkpoint):
 
     print((test_preds == test_labels).float().mean())
 
-
 cli.add_command(train)
 cli.add_command(evaluate)
-
 
 if __name__ == "__main__":
     cli()
